@@ -12,6 +12,12 @@ public class ItemWatcherLink
     [Required]
     public string Link { get; set; } = null!;
 
+    [Required]
+    public string Website { get; set; } = null!;
+
+    [Required]
+    public decimal Price { get; set; }
+
     public string ItemWatcherId { get; set; } = default!;
 
     [ForeignKey(nameof(ItemWatcherId))]
