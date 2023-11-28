@@ -22,6 +22,8 @@ public partial class AmazonScraper(ILogger<AmazonScraper> logger, IDbContextFact
 
         var supportedWatcherLinks = watcher.Links.Where(x => AmazonDomainPattern().IsMatch(x.Link));
 
+        using var dbContext = await dbContextFactory.CreateDbContextAsync();
+
         foreach (var watcherLink in supportedWatcherLinks)
         {
             await page.GoToAsync(watcherLink.Link);
@@ -36,18 +38,19 @@ public partial class AmazonScraper(ILogger<AmazonScraper> logger, IDbContextFact
             if (!decimal.TryParse(priceValue, NumberStyles.Currency, currentCulture, out var price))
             {
                 logger.LogWarning("Price for item '{Title}' not found", watcher.Title);
-                return;
+                continue;
             }
 
             logger.LogInformation("Price for item '{Title}' found: {Price}{CurrencySymbol}", watcher.Title, price, currentCulture.NumberFormat.CurrencySymbol);
 
-            using var dbContext = await dbContextFactory.CreateDbContextAsync();
-
-            watcher.LastCheckAt = DateTime.Now;
-            dbContext.Entry(watcher).State = EntityState.Modified;
-
-            await dbContext.SaveChangesAsync();
+            watcherLink.Price = price;
+            dbContext.Entry(watcherLink).State = EntityState.Modified;
         }
+
+        watcher.LastCheckAt = DateTime.Now;
+        dbContext.Entry(watcher).State = EntityState.Modified;
+
+        await dbContext.SaveChangesAsync();
     }
 
     [GeneratedRegex(@"https?:\/\/(www.)?amazon.\w+/")]

@@ -14,6 +14,14 @@ sealed class Mapper : Mapper<PostWatcherRequest, EmptyResponse, ItemWatcher>
     }
 
     private static HashSet<ItemWatcherLink> ToEntity(IEnumerable<string> links) =>
-        links.Select(link => new ItemWatcherLink { Link = link })
-             .ToHashSet();
+        links.Select(ToEntity).ToHashSet();
+
+    private static ItemWatcherLink ToEntity(string link)
+    {
+        return new()
+        {
+            Link = link,
+            Website = new Uri(link).Host
+        };
+    }
 }

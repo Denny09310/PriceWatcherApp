@@ -17,7 +17,7 @@ namespace PriceWatcher.Server.Data.Migrations
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.0");
 
-            modelBuilder.Entity("PriceWatcher.Implementations.Models.ItemWatcher<string>", b =>
+            modelBuilder.Entity("PriceWatcher.Implementations.Models.ItemWatcher", b =>
                 {
                     b.Property<string>("Id")
                         .ValueGeneratedOnAdd()
@@ -39,16 +39,24 @@ namespace PriceWatcher.Server.Data.Migrations
                     b.ToTable("ItemWatchers");
                 });
 
-            modelBuilder.Entity("PriceWatcher.Implementations.Models.ItemWatcherLink<string>", b =>
+            modelBuilder.Entity("PriceWatcher.Implementations.Models.ItemWatcherLink", b =>
                 {
                     b.Property<string>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("ItemWatcherId")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Link")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Website")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
@@ -59,16 +67,18 @@ namespace PriceWatcher.Server.Data.Migrations
                     b.ToTable("ItemLinks");
                 });
 
-            modelBuilder.Entity("PriceWatcher.Implementations.Models.ItemWatcherLink<string>", b =>
+            modelBuilder.Entity("PriceWatcher.Implementations.Models.ItemWatcherLink", b =>
                 {
-                    b.HasOne("PriceWatcher.Implementations.Models.ItemWatcher<string>", "ItemWatcher")
+                    b.HasOne("PriceWatcher.Implementations.Models.ItemWatcher", "ItemWatcher")
                         .WithMany("Links")
-                        .HasForeignKey("ItemWatcherId");
+                        .HasForeignKey("ItemWatcherId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("ItemWatcher");
                 });
 
-            modelBuilder.Entity("PriceWatcher.Implementations.Models.ItemWatcher<string>", b =>
+            modelBuilder.Entity("PriceWatcher.Implementations.Models.ItemWatcher", b =>
                 {
                     b.Navigation("Links");
                 });
