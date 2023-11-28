@@ -12,7 +12,7 @@ static class DatabaseExtensions
             var connectionString = configuration.GetConnectionString(connectionName)
                 ?? throw new ArgumentException("Cannot find selected connection string", nameof(connectionName));
 
-            opt.UseSqlite(connectionString);
+            opt.UseSqlite(Environment.ExpandEnvironmentVariables(connectionString));
         });
     }
 }

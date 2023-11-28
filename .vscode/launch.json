@@ -15,10 +15,10 @@
             "cwd": "${workspaceFolder}/Server",
             "stopAtEntry": false,
             // Abilita l'avvio di un Web browser all'avvio di ASP.NET Core. Per ulteriori informazioni: https://aka.ms/VSCode-CS-LaunchJson-WebBrowser
-            "serverReadyAction": {
-                "action": "openExternally",
-                "pattern": "\\bNow listening on:\\s+(https?://\\S+)"
-            },
+            // "serverReadyAction": {
+            //     "action": "openExternally",
+            //     "pattern": "\\bNow listening on:\\s+(https?://\\S+)"
+            // },
             "env": {
                 "ASPNETCORE_ENVIRONMENT": "Development"
             },

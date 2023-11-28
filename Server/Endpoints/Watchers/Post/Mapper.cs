@@ -2,9 +2,9 @@
 
 namespace Watchers.Post;
 
-sealed class Mapper : Mapper<PostWatcherRequest, EmptyResponse, ItemWatcher<string>>
+sealed class Mapper : Mapper<PostWatcherRequest, EmptyResponse, ItemWatcher>
 {
-    public override ItemWatcher<string> ToEntity(PostWatcherRequest req)
+    public override ItemWatcher ToEntity(PostWatcherRequest req)
     {
         return new()
         {
@@ -13,7 +13,15 @@ sealed class Mapper : Mapper<PostWatcherRequest, EmptyResponse, ItemWatcher<stri
         };
     }
 
-    private static HashSet<ItemWatcherLink<string>> ToEntity(IEnumerable<string> links) =>
-        links.Select(link => new ItemWatcherLink<string> { Link = link })
-             .ToHashSet();
+    private static HashSet<ItemWatcherLink> ToEntity(IEnumerable<string> links) =>
+        links.Select(ToEntity).ToHashSet();
+
+    private static ItemWatcherLink ToEntity(string link)
+    {
+        return new()
+        {
+            Link = link,
+            Website = new Uri(link).Host
+        };
+    }
 }

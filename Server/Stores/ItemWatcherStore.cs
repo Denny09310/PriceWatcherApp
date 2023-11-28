@@ -7,7 +7,7 @@ namespace PriceWatcher.Server.Stores;
 
 public class ItemWatcherStore(IDbContextFactory<ApplicationDbContext> dbContextFactory) : IItemWatcherStore<ItemWatcher>
 {
-    private static readonly TimeSpan CheckOffset = TimeSpan.FromHours(1);
+    private static readonly TimeSpan CheckOffset = TimeSpan.FromMinutes(1);
 
     public async Task AddAsync(ItemWatcher item, CancellationToken cancellationToken = default)
     {

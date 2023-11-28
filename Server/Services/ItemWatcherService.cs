@@ -32,7 +32,7 @@ public class ItemWatcherService(ILogger<ItemWatcherService> logger, IServiceScop
 
             using var scope = factory.CreateScope();
 
-            var itemWatcherStore = scope.ServiceProvider.GetRequiredService<IItemWatcherStore<ItemWatcher<string>>>();
+            var itemWatcherStore = scope.ServiceProvider.GetRequiredService<IItemWatcherStore<ItemWatcher>>();
 
             logger.LogInformation("Getting next watcher batch");
             var watchers = await itemWatcherStore.GetBatchAsync(stoppingToken);
