@@ -1,13 +1,14 @@
 using System.Globalization;
 using System.Text.RegularExpressions;
-using Microsoft.Extensions.Logging;
+using Microsoft.EntityFrameworkCore;
 using PriceWatcher.Implementations.Contracts.Scrapers;
 using PriceWatcher.Implementations.Models;
+using PriceWatcher.Server.Data;
 using PuppeteerSharp;
 
-namespace PriceWatcher.Implementations.Scrapers;
+namespace PriceWatcher.Server.Scrapers;
 
-public partial class AmazonScraper(ILogger<AmazonScraper> logger) : IScraper
+public partial class AmazonScraper(ILogger<AmazonScraper> logger, IDbContextFactory<ApplicationDbContext> dbContextFactory) : IScraper
 {
     public Task GetPriceForItemsAsync(IBrowser browser, IEnumerable<ItemWatcher> watchers)
     {
@@ -34,10 +35,18 @@ public partial class AmazonScraper(ILogger<AmazonScraper> logger) : IScraper
 
             if (!decimal.TryParse(priceValue, NumberStyles.Currency, currentCulture, out var price))
             {
+                logger.LogWarning("Price for item '{Title}' not found", watcher.Title);
                 return;
             }
 
-            logger.LogInformation("Price for item {Title} found: {Price}{CurrencySymbol}", watcher.Title, price, currentCulture.NumberFormat.CurrencySymbol);
+            logger.LogInformation("Price for item '{Title}' found: {Price}{CurrencySymbol}", watcher.Title, price, currentCulture.NumberFormat.CurrencySymbol);
+
+            using var dbContext = await dbContextFactory.CreateDbContextAsync();
+
+            watcher.LastCheckAt = DateTime.Now;
+            dbContext.Entry(watcher).State = EntityState.Modified;
+
+            await dbContext.SaveChangesAsync();
         }
     }
 

@@ -1,7 +1,7 @@
 using PriceWatcher.Implementations.Contracts;
 using PriceWatcher.Implementations.Contracts.Scrapers;
 using PriceWatcher.Implementations.Models;
-using PriceWatcher.Implementations.Scrapers;
+using PriceWatcher.Server.Scrapers;
 using PriceWatcher.Server.Services;
 using PriceWatcher.Server.Stores;
 
