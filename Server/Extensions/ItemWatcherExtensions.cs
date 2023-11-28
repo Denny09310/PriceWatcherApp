@@ -11,7 +11,7 @@ static class ItemWatcherExtensions
 {
     public static IServiceCollection RegisterItemWatcher(this IServiceCollection services)
     {
-        services.AddScoped<IItemWatcherStore<ItemWatcher<string>>, ItemWatcherStore>();
+        services.AddScoped<IItemWatcherStore<ItemWatcher>, ItemWatcherStore>();
         services.AddScoped<IScraper, AmazonScraper>();
         services.AddHostedService<ItemWatcherService>();
 

@@ -12,7 +12,7 @@ public class ItemWatcherLink
     [Required]
     public string Link { get; set; } = null!;
 
-    public T ItemWatcherId { get; set; } = default!;
+    public string ItemWatcherId { get; set; } = default!;
 
     [ForeignKey(nameof(ItemWatcherId))]
     public virtual ItemWatcher ItemWatcher { get; set; } = default!;

@@ -3,7 +3,7 @@ using PriceWatcher.Implementations.Models;
 
 namespace Watchers.Post;
 
-sealed class PostWatcherEndpoint(IItemWatcherStore<ItemWatcher<string>> store) : Endpoint<PostWatcherRequest, EmptyResponse, Mapper>
+sealed class PostWatcherEndpoint(IItemWatcherStore<ItemWatcher> store) : Endpoint<PostWatcherRequest, EmptyResponse, Mapper>
 {
     public override void Configure()
     {
